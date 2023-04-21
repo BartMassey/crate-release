@@ -28,6 +28,12 @@ This work is licensed under the "MIT License". Please see the file
   unset, the docs will appear on `crates.io` anyhow once
   processed.
 * Remove any `publish=false` from `Cargo.toml`
+* Add a `clippy.toml` at the top level that looks like
+
+        avoid-breaking-exported-api = false
+
+  This allows Clippy to fully do its job. Note that this puts the
+  onus on the developer to notice breaking API changes. Oh noes.
 * Add `version-sync` to `dev-dependencies` and install the
   `version-sync.rs` test in `tests/`
 * Deal with the badge display mess. Add some badges to
