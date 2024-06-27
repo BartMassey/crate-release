@@ -1,0 +1,13 @@
+#!/bin/sh
+# https://rust-lang.github.io/api-guidelines/documentation.html
+#   #release-notes-document-all-significant-changes-c-relnotes
+# Tag the current commit
+REL="$1"
+shift
+NOTES=""
+if [ $# -gt 0 ]
+then
+    NOTES=": $*"
+fi
+GIT_COMMITTER_DATE=$(git log -n1 --pretty=%aD) git tag -a -m "Release $REL" $REL
+# git push --tags

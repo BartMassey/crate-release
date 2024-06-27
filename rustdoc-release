@@ -1,0 +1,33 @@
+#!/bin/sh
+# Copyright © 2012 Bart Massey
+# [This program is licensed under the "MIT License"]
+# Please see the file COPYING in the source
+# distribution of this software for license terms.
+if [ ! -d .git ]
+then
+    echo "not in appropriate directory: giving up" >&2
+    exit 1
+fi
+
+BRANCH=`git branch | egrep '^\* ' | sed 's/^\* //'`
+if [ "$BRANCH" != 'main' ]
+then
+    echo "not on main branch: giving up" >&2
+    exit 1
+fi
+
+MAIN=`git show-ref heads/main | awk '{print $1;}'`
+MSG="documentation for $MAIN from main"
+NAME=`cargo thiscrate`
+
+git checkout gh-pages &&
+git rebase main &&
+cargo clean &&
+cargo doc &&
+cp -a target/doc docs &&
+echo "<meta http-equiv=\"refresh\" content=\"0; url=$NAME\">" >docs/index.html &&
+git add docs &&
+git commit -m "$MSG" &&
+git push -f
+
+git checkout main
